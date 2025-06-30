@@ -60,7 +60,7 @@ function ClientWrapper() {
         <div id="experience" ref={sectionRefs.experience} className="min-h-[400px]"><Experience /></div>
         <div id="contact" ref={sectionRefs.contact}><Contact /></div>
       </main>
-      <Footer backgroundColor={SECTION_COLORS[currentSection]} />
+      {/* <Footer backgroundColor={SECTION_COLORS[currentSection]} /> */}
     </>
   );
 }
