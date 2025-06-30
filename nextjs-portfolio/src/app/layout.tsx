@@ -21,17 +21,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  currentSection,
 }: Readonly<{
   children: React.ReactNode;
+  currentSection?: string;
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.className} bg-black text-white`}>
-        <Header />
+        <Header currentSection={currentSection} />
         <main className="pt-16 pb-8">
         {children}
         </main>
-        <Footer />
+        <Footer backgroundColor="bg-black" />
       </body>
     </html>
   );

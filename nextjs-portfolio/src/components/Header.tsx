@@ -17,14 +17,22 @@ import {
 } from "motion/react";
 
 const navItems = [
-  { title: "Home", icon: <IconHome size={20} />, href: "/" },
-  { title: "About", icon: <IconUser size={20} />, href: "/about" },
-  { title: "Projects", icon: <IconBriefcase size={20} />, href: "/projects" },
-  { title: "Experience", icon: <IconBook size={20} />, href: "/experience" },
-  { title: "Contact", icon: <IconMail size={20} />, href: "/contact" },
+  { title: "Home", icon: <IconHome size={20} />, href: "#hero", section: "hero" },
+  { title: "About", icon: <IconUser size={20} />, href: "#about", section: "about" },
+  { title: "Projects", icon: <IconBriefcase size={20} />, href: "#projects", section: "projects" },
+  { title: "Experience", icon: <IconBook size={20} />, href: "#experience", section: "experience" },
+  { title: "Contact", icon: <IconMail size={20} />, href: "#contact", section: "contact" },
 ];
 
-export default function Header() {
+const sectionToHref: Record<string, string> = {
+  hero: '/',
+  about: '/about',
+  projects: '/projects',
+  experience: '/experience',
+  contact: '/contact',
+};
+
+export default function Header({ currentSection }: { currentSection?: string }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
   const pathname = usePathname();
@@ -69,6 +77,14 @@ export default function Header() {
   // Floating Dock logic for desktop
   let mouseX = useMotionValue(Infinity);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, section: string) => {
+    e.preventDefault();
+    const el = document.getElementById(section);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <>
       <motion.header
@@ -110,7 +126,13 @@ export default function Header() {
             )}
           >
             {navItems.map((item) => (
-              <IconContainer mouseX={mouseX} key={item.title} {...item} active={pathname === item.href} />
+              <span key={item.title} onClick={(e) => handleNavClick(e as any, item.section)} style={{ cursor: 'pointer' }}>
+                <IconContainer
+                  mouseX={mouseX}
+                  {...item}
+                  active={currentSection === item.section}
+                />
+              </span>
             ))}
           </motion.div>
 
@@ -157,9 +179,12 @@ export default function Header() {
                       href={item.href}
                       className={cn(
                         "flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 transition-colors touch-manipulation min-h-[60px]",
-                        pathname === item.href && "ring-2 ring-blue-500 bg-blue-500/10"
+                        currentSection === item.section && "ring-2 ring-blue-500 bg-blue-500/10"
                       )}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={e => {
+                        handleNavClick(e, item.section);
+                        setMobileOpen(false);
+                      }}
                     >
                       <div className="h-5 w-5 text-zinc-300 mb-1">{item.icon}</div>
                       <span className="text-xs text-zinc-300 text-center leading-tight">{item.title}</span>

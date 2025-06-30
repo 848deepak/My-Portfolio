@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Heart, Instagram, Code } from 'lucide-react';
 import { socialLinks, personalInfo } from '@/lib/data';
 
-const Footer = () => {
+const Footer = ({ backgroundColor = "bg-black" }: { backgroundColor?: string }) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-black text-white py-8 border-t border-gray-800/30">
+    <footer className={`${backgroundColor} text-white py-8 border-t border-gray-800/30`}>
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           {/* Copyright */}
