@@ -182,8 +182,12 @@ export default function Header({ currentSection }: { currentSection?: string }) 
                         currentSection === item.section && "ring-2 ring-blue-500 bg-blue-500/10"
                       )}
                       onClick={e => {
-                        handleNavClick(e, item.section);
-                        setMobileOpen(false);
+                        const el = document.getElementById(item.section);
+                        if (el) {
+                          e.preventDefault();
+                          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          setMobileOpen(false);
+                        } // else, let the browser handle the anchor navigation
                       }}
                     >
                       <div className="h-5 w-5 text-zinc-300 mb-1">{item.icon}</div>
