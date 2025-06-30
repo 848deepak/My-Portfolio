@@ -136,7 +136,7 @@ const Projects = () => {
           className="text-center mt-12"
         >
           <a
-            href="https://github.com/deepakpandey"
+            href="https://github.com/848deepak/My-Portfolio"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-secondary inline-flex items-center gap-2"
