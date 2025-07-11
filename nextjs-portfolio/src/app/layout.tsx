@@ -19,6 +19,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({
   children,
   currentSection,
@@ -28,9 +35,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} bg-black text-white`}>
+      <body className={`${inter.className} bg-black text-white overflow-x-hidden`}>
         <Header currentSection={currentSection} />
-        <main className="pt-16 pb-8">
+        <main className="pt-16 sm:pt-18 lg:pt-20 pb-8">
         {children}
         </main>
         <Footer backgroundColor="bg-black" />

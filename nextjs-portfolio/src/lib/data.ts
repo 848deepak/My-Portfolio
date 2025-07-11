@@ -90,6 +90,16 @@ export const projects: Project[] = [
     technologies: ["C++", "C", "Python", "Data Structures"],
     githubUrl: "https://github.com/848deepak/CU-Coding-Portfolio",
     featured: false,
+  },
+  {
+    id: "7",
+    title: "CodeContest-IDE",
+    description: "A modern online IDE with contest management system. Features multi-language code editor, contest system, user management, admin dashboard, and judge system for code execution and validation.",
+    image: "/images/projects/codecontest-ide.jpg",
+    technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Monaco Editor", "Supabase", "PostgreSQL", "Prisma", "NextAuth.js"],
+    githubUrl: "https://github.com/848deepak/CodeContest-IDE",
+    liveUrl: "https://code-contest-ide.vercel.app/",
+    featured: true,
   }
 ];
 

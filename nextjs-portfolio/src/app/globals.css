@@ -47,6 +47,37 @@ html, body {
   body {
     @apply antialiased bg-black text-white;
   }
+  
+  /* Mobile optimization */
+  @media (max-width: 768px) {
+    html {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+    
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Prevent horizontal scroll */
+    body, html {
+      overflow-x: hidden;
+      width: 100%;
+    }
+    
+    /* Better touch targets */
+    button, a {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Smooth scrolling for mobile */
+    * {
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
 }
 
 @layer components {

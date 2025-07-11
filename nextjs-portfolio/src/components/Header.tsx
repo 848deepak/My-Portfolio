@@ -17,11 +17,11 @@ import {
 } from "motion/react";
 
 const navItems = [
-  { title: "Home", icon: <IconHome size={20} />, href: "#hero", section: "hero" },
-  { title: "About", icon: <IconUser size={20} />, href: "#about", section: "about" },
-  { title: "Projects", icon: <IconBriefcase size={20} />, href: "#projects", section: "projects" },
-  { title: "Experience", icon: <IconBook size={20} />, href: "#experience", section: "experience" },
-  { title: "Contact", icon: <IconMail size={20} />, href: "#contact", section: "contact" },
+  { title: "Home", icon: <IconHome size={20} />, href: "/", section: "hero" },
+  { title: "About", icon: <IconUser size={20} />, href: "/about", section: "about" },
+  { title: "Projects", icon: <IconBriefcase size={20} />, href: "/projects", section: "projects" },
+  { title: "Experience", icon: <IconBook size={20} />, href: "/experience", section: "experience" },
+  { title: "Contact", icon: <IconMail size={20} />, href: "/contact", section: "contact" },
 ];
 
 const sectionToHref: Record<string, string> = {
@@ -38,6 +38,18 @@ export default function Header({ currentSection }: { currentSection?: string }) 
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Determine current section based on pathname
+  const getCurrentSection = () => {
+    if (pathname === '/') return 'hero';
+    if (pathname === '/about') return 'about';
+    if (pathname === '/projects') return 'projects';
+    if (pathname === '/experience') return 'experience';
+    if (pathname === '/contact') return 'contact';
+    return currentSection || 'hero';
+  };
+
+  const activeSection = getCurrentSection();
 
   const searchPlaceholders = [
     "Search for projects...",
@@ -77,32 +89,24 @@ export default function Header({ currentSection }: { currentSection?: string }) 
   // Floating Dock logic for desktop
   let mouseX = useMotionValue(Infinity);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, section: string) => {
-    e.preventDefault();
-    const el = document.getElementById(section);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   return (
     <>
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gray-800 shadow-lg"
+        className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-gray-800 shadow-lg"
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 flex items-center h-14 sm:h-16 lg:h-20">
-          {/* Logo - Smaller on mobile */}
-          <Link href="/" className="flex items-center space-x-2 cursor-pointer mr-2 sm:mr-4 flex-shrink-0">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-extrabold text-sm sm:text-base lg:text-lg">D</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16 sm:h-18 lg:h-20">
+          {/* Logo - Better mobile sizing */}
+          <Link href="/" className="flex items-center space-x-2 cursor-pointer mr-4 flex-shrink-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-extrabold text-base sm:text-lg lg:text-xl">D</span>
             </div>
-            <span className="font-bold text-base sm:text-lg lg:text-xl bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent hidden sm:block">
+            <span className="font-bold text-lg sm:text-xl lg:text-2xl bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent hidden sm:block">
               Deepak Pandey
             </span>
-            <span className="font-bold text-sm bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent sm:hidden">
-              DP
+            <span className="font-bold text-base bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent sm:hidden">
+              Deepak
             </span>
           </Link>
 
@@ -126,41 +130,64 @@ export default function Header({ currentSection }: { currentSection?: string }) 
             )}
           >
             {navItems.map((item) => (
-              <span key={item.title} onClick={(e) => handleNavClick(e as any, item.section)} style={{ cursor: 'pointer' }}>
+              <Link key={item.title} href={item.href}>
                 <IconContainer
                   mouseX={mouseX}
                   {...item}
-                  active={currentSection === item.section}
+                  active={activeSection === item.section}
                 />
-              </span>
+              </Link>
             ))}
           </motion.div>
 
-          {/* Mobile Menu Button - Larger touch target */}
+          {/* Mobile Menu Button - Better touch target */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 text-gray-300 hover:text-white transition-colors duration-200 ml-auto touch-manipulation"
+            className="lg:hidden p-3 text-gray-300 hover:text-white transition-colors duration-200 ml-auto touch-manipulation relative"
             aria-label="Toggle mobile menu"
+            aria-expanded={mobileOpen}
           >
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-menu">
-              <line x1="4" y1="12" x2="20" y2="12"/>
-              <line x1="4" y1="6" x2="20" y2="6"/>
-              <line x1="4" y1="18" x2="20" y2="18"/>
-            </svg>
+            <motion.div
+              animate={mobileOpen ? "open" : "closed"}
+              className="w-6 h-6 flex flex-col justify-center items-center"
+            >
+              <motion.span
+                variants={{
+                  closed: { rotate: 0, y: 0 },
+                  open: { rotate: 45, y: 6 }
+                }}
+                className="w-6 h-0.5 bg-current block absolute transition-all duration-300"
+              />
+              <motion.span
+                variants={{
+                  closed: { opacity: 1 },
+                  open: { opacity: 0 }
+                }}
+                className="w-6 h-0.5 bg-current block absolute transition-all duration-300"
+              />
+              <motion.span
+                variants={{
+                  closed: { rotate: 0, y: 0 },
+                  open: { rotate: -45, y: -6 }
+                }}
+                className="w-6 h-0.5 bg-current block absolute transition-all duration-300"
+              />
+            </motion.div>
           </button>
         </div>
 
-        {/* Mobile Navigation - Improved layout */}
+        {/* Mobile Navigation - Enhanced layout */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-gray-700 bg-black overflow-hidden"
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="lg:hidden border-t border-gray-700 bg-black/95 backdrop-blur-sm overflow-hidden"
             >
-              <div className="px-3 sm:px-4 py-4 space-y-4">
-                {/* Mobile Search Input - Full width */}
+              <div className="px-4 py-6 space-y-6">
+                {/* Mobile Search Input - Improved styling */}
                 <div className="w-full">
                   <SimpleSearch
                     placeholders={searchPlaceholders}
@@ -171,28 +198,31 @@ export default function Header({ currentSection }: { currentSection?: string }) 
                   />
                 </div>
                 
-                {/* Mobile Navigation Grid - Better spacing */}
-                <div className="grid grid-cols-5 gap-2 sm:gap-3">
-                  {navItems.map((item) => (
-                    <a
+                {/* Mobile Navigation - Improved grid layout */}
+                <div className="grid grid-cols-3 sm:grid-cols-5 gap-4">
+                  {navItems.map((item, index) => (
+                    <motion.div
                       key={item.title}
-                      href={item.href}
-                      className={cn(
-                        "flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 transition-colors touch-manipulation min-h-[60px]",
-                        currentSection === item.section && "ring-2 ring-blue-500 bg-blue-500/10"
-                      )}
-                      onClick={e => {
-                        const el = document.getElementById(item.section);
-                        if (el) {
-                          e.preventDefault();
-                          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                          setMobileOpen(false);
-                        } // else, let the browser handle the anchor navigation
-                      }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
                     >
-                      <div className="h-5 w-5 text-zinc-300 mb-1">{item.icon}</div>
-                      <span className="text-xs text-zinc-300 text-center leading-tight">{item.title}</span>
-                    </a>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "flex flex-col items-center justify-center py-4 px-3 rounded-xl bg-zinc-800/50 border border-zinc-700 hover:bg-zinc-700/50 active:bg-zinc-600/50 transition-all duration-200 touch-manipulation min-h-[70px] group w-full",
+                          activeSection === item.section && "ring-2 ring-blue-500 bg-blue-500/10 border-blue-500/30"
+                        )}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <div className="h-6 w-6 text-zinc-300 group-hover:text-white mb-2 transition-colors">
+                          {item.icon}
+                        </div>
+                        <span className="text-xs text-zinc-300 group-hover:text-white text-center leading-tight transition-colors font-medium">
+                          {item.title}
+                        </span>
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -215,13 +245,11 @@ function IconContainer({
   mouseX,
   title,
   icon,
-  href,
   active,
 }: {
   mouseX: MotionValue;
   title: string;
   icon: React.ReactNode;
-  href: string;
   active?: boolean;
 }) {
   let ref = useRef<HTMLDivElement>(null);
@@ -262,36 +290,34 @@ function IconContainer({
   const [hovered, setHovered] = useState(false);
 
   return (
-    <a href={href}>
-      <motion.div
-        ref={ref}
-        style={{ width, height }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        className={cn(
-          "relative flex aspect-square items-center justify-center rounded-full bg-zinc-800 border border-zinc-600 hover:bg-zinc-700 transition-colors",
-          active && "ring-2 ring-blue-500"
+    <motion.div
+      ref={ref}
+      style={{ width, height }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className={cn(
+        "relative flex aspect-square items-center justify-center rounded-full bg-zinc-800 border border-zinc-600 hover:bg-zinc-700 transition-colors cursor-pointer",
+        active && "ring-2 ring-blue-500"
+      )}
+    >
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 2, x: "-50%" }}
+            className="absolute -top-8 left-1/2 w-fit rounded-md border border-zinc-600 bg-zinc-800 px-2 py-0.5 text-xs whitespace-pre text-zinc-200"
+          >
+            {title}
+          </motion.div>
         )}
+      </AnimatePresence>
+      <motion.div
+        style={{ width: widthIcon, height: heightIcon }}
+        className="flex items-center justify-center"
       >
-        <AnimatePresence>
-          {hovered && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, x: "-50%" }}
-              animate={{ opacity: 1, y: 0, x: "-50%" }}
-              exit={{ opacity: 0, y: 2, x: "-50%" }}
-              className="absolute -top-8 left-1/2 w-fit rounded-md border border-zinc-600 bg-zinc-800 px-2 py-0.5 text-xs whitespace-pre text-zinc-200"
-            >
-              {title}
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <motion.div
-          style={{ width: widthIcon, height: heightIcon }}
-          className="flex items-center justify-center"
-        >
-          {icon}
-        </motion.div>
+        {icon}
       </motion.div>
-    </a>
+    </motion.div>
   );
 } 
