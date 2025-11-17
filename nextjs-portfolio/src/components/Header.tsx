@@ -102,10 +102,10 @@ export default function Header({ currentSection }: { currentSection?: string }) 
             <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-extrabold text-base sm:text-lg lg:text-xl">D</span>
             </div>
-            <span className="font-bold text-lg sm:text-xl lg:text-2xl bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent hidden sm:block">
+            <span className="font-bold text-lg sm:text-xl lg:text-2xl text-white hidden sm:block">
               Deepak Pandey
             </span>
-            <span className="font-bold text-base bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent sm:hidden">
+            <span className="font-bold text-base text-white sm:hidden">
               Deepak
             </span>
           </Link>

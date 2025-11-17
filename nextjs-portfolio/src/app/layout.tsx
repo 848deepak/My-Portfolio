@@ -34,8 +34,8 @@ export default function RootLayout({
   currentSection?: string;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} bg-black text-white overflow-x-hidden`}>
+    <html lang="en" className="scroll-smooth dark">
+      <body className={`${inter.className} bg-black text-white overflow-x-hidden`} style={{ colorScheme: 'dark' }}>
         <Header currentSection={currentSection} />
         <main className="pt-16 sm:pt-18 lg:pt-20 pb-8">
         {children}
