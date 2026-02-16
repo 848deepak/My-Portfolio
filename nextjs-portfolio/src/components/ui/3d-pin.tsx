@@ -27,15 +27,29 @@ export const PinContainer = ({
     setTransform("translate(-50%,-50%) rotateX(0deg) scale(1)");
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (href) {
+      e.preventDefault();
+      window.open(href, '_blank');
+    }
+  };
+
   return (
-    <a
+    <div
       className={cn(
-        "relative group/pin z-50  cursor-pointer",
+        "relative group/pin z-50 cursor-pointer",
         containerClassName
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      href={href || "/"}
+      onClick={handleClick}
+      role="link"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleClick(e as any);
+        }
+      }}
     >
       <div
         style={{
@@ -54,7 +68,7 @@ export const PinContainer = ({
         </div>
       </div>
       <PinPerspective title={title} href={href} />
-    </a>
+    </div>
   );
 };
 
